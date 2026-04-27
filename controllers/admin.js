@@ -10,8 +10,8 @@ exports.getAddProduct = (req, res, next) => {
 
 exports.postAddProduct = (req, res, next) => {
   const { title, imageUrl, price, description } = req.body;
-  // CreateProduct is a maigic method created by sequelize because of the association between user and product
-  req.user.createProduct({ title, imageUrl, price, description })
+  const products = new Product(title, price, imageUrl, description, null, req.user._id);
+  products.save()
     .then((result) => {
       console.log("Product Created");
       res.redirect("/products");
@@ -27,7 +27,7 @@ exports.getEditProduct = (req, res, next) => {
     return res.redirect("/");
   }
   const prodId = req.params.productId;
-  Product.findByPk(prodId).then((product) => {
+  Product.findById(prodId).then((product) => {
     if (!product) {
       return res.redirect("/");
     }
@@ -42,10 +42,8 @@ exports.getEditProduct = (req, res, next) => {
 
 exports.postEditProduct = (req, res, next) => {
   const { productId, title, imageUrl, price, description } = req.body;
-  Product.update(
-    { title, imageUrl, price, description },
-    { where: { id: productId } },
-    )
+  const product = new Product(title, price, imageUrl, description, productId);
+  product.save()
     .then((result) => {
       console.log("Product Updated");
       res.redirect("/admin/products");
@@ -56,7 +54,7 @@ exports.postEditProduct = (req, res, next) => {
 };
 
 exports.getProducts = (req, res, next) => {
-  Product.findAll()
+  Product.fetchAll()
     .then((products) => {
       res.render("admin/products", {
         prods: products,
@@ -71,8 +69,8 @@ exports.getProducts = (req, res, next) => {
 
 exports.postDeleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
-  Product.destroy({ where: { id: prodId } })
-    .then((result) => {
+  Product.deleteById(prodId)
+    .then(() => {
       console.log("Product Deleted");
       res.redirect("/admin/products");
     })
