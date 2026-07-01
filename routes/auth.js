@@ -8,8 +8,12 @@ const router = express.Router();
 
 router.get('/login', authController.getLogin);
 router.get('/signup', authController.getSignUp)
+router.get('/reset-password', authController.getReset);
 router.post('/login', authController.postLogin);
 router.post('/signup', authController.postSignUp);
 router.post('/logout', authController.postLogout);
+router.post('/reset-password', authController.postReset);
+router.get('/reset-password/:token', authController.getNewPassword);
+router.post('/new-password', authController.postNewPassword);
 
 module.exports = router;
