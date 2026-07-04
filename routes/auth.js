@@ -21,9 +21,10 @@ router.post('/signup',
                     }
                 })
             }).trim(),
-        body('password', 'Password must be contain at least 5 charachter and numeric')
-            .isLength({ min: 5 })
-            .isAlphanumeric().trim(),
+        body('password')
+            .isLength({ min: 5 }).withMessage('Password must be at least 5 characters')
+            .isAlphanumeric().withMessage('Password must contain only letters and numbers')
+            .trim(),
         body('confirmPassword').trim().custom((value, { req }) => {
             if (value !== req.body.password) {
                 return Promise.reject('Password confirmation does not match');
@@ -32,13 +33,15 @@ router.post('/signup',
         })
     ]
     , authController.postSignUp);
-router.post('/login',
+router.post('/login', [
     body('email')
-        .isEmail()
-        .withMessage('Please enter a valid email').trim(),
-    body('password', 'Invalid email or password')
-        .isLength({ min: 5 })
-        .isAlphanumeric().trim(),
+        .isEmail().withMessage('Please enter a valid email')
+        .trim(),
+    body('password')
+        .isLength({ min: 5 }).withMessage('Password must be at least 5 characters')
+        .isAlphanumeric().withMessage('Password must contain only letters and numbers')
+        .trim(),
+],
     authController.postLogin);
 router.post('/logout', authController.postLogout);
 router.post('/reset-password', authController.postReset);

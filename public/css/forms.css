@@ -22,10 +22,18 @@
   outline-color: #00695c;
 }
 
-.form-control input.invalid {
+.form-control input.invalid,
+.form-control textarea.invalid {
   border-color: red;
 }
 
 .form-control label.invalid {
   color: red;
+}
+
+.error-text {
+  color: red;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+  display: block;
 }
