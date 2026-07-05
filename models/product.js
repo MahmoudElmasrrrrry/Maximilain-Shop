@@ -4,11 +4,11 @@ const Schema = mongoose.Schema;
 const productSchema = new Schema({
   title:{
     type: String,
-    require:true,
+    required:true,
   },
   price:{
     type:Number,
-    require:true,
+    required:true,
   },
   description:{
     type:String,
@@ -21,7 +21,7 @@ const productSchema = new Schema({
   userId:{
     type: mongoose.Types.ObjectId,
     ref: 'User',
-    require: true
+    required: true
   }
 })
 

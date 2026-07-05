@@ -20,10 +20,6 @@ router.post('/add-product', auth,
             .isString().withMessage('Title must be a string')
             .isLength({ min: 3 }).withMessage('Title must be at least 3 characters')
             .trim(),
-        body('imageUrl')
-            .notEmpty().withMessage('Image URL is required')
-            .isURL().withMessage('Please enter a valid URL')
-            .trim(),
         body('price')
             .notEmpty().withMessage('Price is required')
             .isFloat({ gt: 0 }).withMessage('Price must be a positive number')
@@ -42,10 +38,6 @@ router.post('/edit-product', auth, [
             .notEmpty().withMessage('Title is required')
             .isString().withMessage('Title must be a string')
             .isLength({ min: 3 }).withMessage('Title must be at least 3 characters')
-            .trim(),
-        body('imageUrl')
-            .notEmpty().withMessage('Image URL is required')
-            .isURL().withMessage('Please enter a valid URL')
             .trim(),
         body('price')
             .notEmpty().withMessage('Price is required')

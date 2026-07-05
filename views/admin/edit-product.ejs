@@ -10,7 +10,7 @@
         <% if (errorMessage) { %>
             <div class="user-message user-message--error"><%= errorMessage %></div>
         <% } %>
-        <form class="product-form" action="/admin/<% if (editing) { %>edit-product<% } else { %>add-product<% } %>" method="POST">
+        <form class="product-form" action="/admin/<% if (editing) { %>edit-product<% } else { %>add-product<% } %>" method="POST" enctype="multipart/form-data">
             <div class="form-control">
                 <label class="<%= validationErrors.find(e => e.path === 'title') ? 'invalid' : '' %>" for="title">Title</label>
                 <input
@@ -22,14 +22,9 @@
                 <% }) %>
             </div>
             <div class="form-control">
-                <label class="<%= validationErrors.find(e => e.path === 'imageUrl') ? 'invalid' : '' %>" for="imageUrl">Image URL</label>
+                <label for="image">Image</label>
                 <input
-                    class="<%= validationErrors.find(e => e.path === 'imageUrl') ? 'invalid' : '' %>"
-                    type="text" name="imageUrl" id="imageUrl"
-                    value="<% if (editing) { %><%= product.imageUrl %><% } else { %><%= oldContent.imageUrl %><% } %>">
-                <% validationErrors.filter(e => e.path === 'imageUrl').forEach(err => { %>
-                    <span class="error-text"><%= err.msg %></span>
-                <% }) %>
+                    type="file" name="image" id="image">
             </div>
             <div class="form-control">
                 <label class="<%= validationErrors.find(e => e.path === 'price') ? 'invalid' : '' %>" for="price">Price</label>

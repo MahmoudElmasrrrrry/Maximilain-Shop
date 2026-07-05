@@ -3,7 +3,6 @@ const bcrypt = require("bcryptjs")
 const nodemailer = require("nodemailer");
 const { validationResult } = require('express-validator');
 const crypto = require("crypto");
-const { error } = require("console");
 
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
@@ -188,19 +187,19 @@ exports.postReset = (req, res, next) => {
                 }
                 user.resetToken = token;
                 user.resetTokenExpiration = Date.now() + 3600000;
-                return user.save();
-            })
-            .then(result => {
-                res.redirect('/');
-                return transporter.sendMail({
-                    to: req.body.email,
-                    from: 'test@shop.com',
-                    subject: 'Reset Password',
-                    html: `
-                    <p>You requested a password reset</p>
-                    <p>Click this link to reset your password: <a href="http://localhost:3000/reset-password/${token}">Reset Password</a></p>
-                `
-                })
+                return user.save()
+                    .then(result => {
+                        res.redirect('/');
+                        return transporter.sendMail({
+                            to: req.body.email,
+                            from: 'test@shop.com',
+                            subject: 'Reset Password',
+                            html: `
+                            <p>You requested a password reset</p>
+                            <p>Click this link to reset your password: <a href="http://localhost:3000/reset-password/${token}">Reset Password</a></p>
+                        `
+                        })
+                    });
             })
             .catch(err => {
                 console.log(err);
@@ -212,6 +211,10 @@ exports.getNewPassword = (req, res, next) => {
     const token = req.params.token;
     User.findOne({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } })
         .then(user => {
+            if (!user) {
+                req.flash('error', 'Password reset token is invalid or has expired.');
+                return res.redirect('/reset-password');
+            }
             let message = req.flash('error');
             message.length > 0 ? message = message[0] : message = null;
             res.render('auth/new-password', {
