@@ -17,7 +17,7 @@ const orderSchema = new Schema({
     user: {
         name: {
             type: String,
-            required: true
+            required: false
         },
         userId: {
             type: mongoose.Types.ObjectId,
