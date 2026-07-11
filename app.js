@@ -47,7 +47,7 @@ const {doubleCsrfProtection} = doubleCsrf({
     signed: false,
     httpOnly: false,
   },
-  getCsrfTokenFromRequest: (req) => req.body._csrf,
+  getCsrfTokenFromRequest: (req) => req.body._csrf || req.headers['csrf-token'],
 });
 
 app.set("view engine", "ejs");

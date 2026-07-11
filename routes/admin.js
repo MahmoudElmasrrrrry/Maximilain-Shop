@@ -50,6 +50,6 @@ router.post('/edit-product', auth, [
     ],
     adminController.postEditProduct);
 
-router.post('/delete-product', auth, adminController.postDeleteProduct);
+router.delete('/product/:productId', auth, adminController.deleteProduct);
 
 module.exports = router;
