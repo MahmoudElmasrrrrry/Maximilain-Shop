@@ -1,3 +1,4 @@
+require('dotenv').config();
 const path = require("path");
 const mongoose = require('mongoose');
 
@@ -15,7 +16,7 @@ const { doubleCsrf } = require('csrf-csrf');
 const MongoDbStore = require('connect-mongodb-session')(session);
 
 const app = express();
-const MongoUri = 'mongodb://localhost:27017/shop'
+const MongoUri = process.env.MONGODB_URI;
 const store = new MongoDbStore({
   uri: MongoUri,
   collection: 'sessions'
@@ -38,7 +39,7 @@ const fileFilter = (req, file, cb) => {
 
 // csrf-csrf setup
 const {doubleCsrfProtection} = doubleCsrf({
-  getSecret: () => "my-csrf-secret-key",
+  getSecret: () => process.env.CSRF_SECRET,
   getSessionIdentifier: (req) => req.session.id || "",
   cookieName: "x-csrf-token",
   cookieOptions: {
@@ -67,7 +68,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use('/images',express.static(path.join(__dirname, 'images')));
 app.use(cookieParser());
 app.use(session({
-  secret:"my secret key",
+  secret: process.env.SESSION_SECRET,
   resave:false,
   saveUninitialized:false,
   store:store
@@ -98,8 +99,8 @@ app.use(errorController.get404);
 mongoose.connect(MongoUri)
   .then(() => {
     console.log("Connected to database");
-    app.listen(3000, () => {
-      console.log("Server is running on port 3000");
+    app.listen(process.env.PORT || 4000, () => {
+      console.log(`Server is running on port ${process.env.PORT || 4000}`);
     });
   })
   .catch(err => {

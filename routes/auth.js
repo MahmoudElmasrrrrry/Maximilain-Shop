@@ -11,6 +11,11 @@ router.get('/signup', authController.getSignUp)
 router.get('/reset-password', authController.getReset);
 router.post('/signup',
     [
+        body('name')
+            .trim()
+            .notEmpty().withMessage('Name is required')
+            .isLength({ min: 2 }).withMessage('Name must be at least 2 characters')
+            .isLength({ max: 50 }).withMessage('Name must be at most 50 characters'),
         check('email')
             .isEmail()
             .withMessage('Please enter a valid email')

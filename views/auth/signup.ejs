@@ -12,6 +12,14 @@
         <% } %>
         <form class="login-form" action="/signup" method="POST">
             <div class="form-control">
+                <label for="name">Name</label>
+                <input class="<%=validationErrors.find(e=>e.path === 'name') ? 'invalid' : '' %>" type="text" name="name" id="name" value="<%= oldContent.name %>">
+                <% const nameErr = validationErrors.find(e => e.path === 'name'); %>
+                <% if (nameErr) { %>
+                    <span class="error-text"><%= nameErr.msg %></span>
+                <% } %>
+            </div>
+            <div class="form-control">
                 <label for="email">E-Mail</label>
                 <input class="<%=validationErrors.find(e=>e.path === 'email') ? 'invalid' : '' %>" type="email" name="email" id="email" value="<%= oldContent.email %>">
                 <% const emailErr = validationErrors.find(e => e.path === 'email'); %>

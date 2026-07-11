@@ -9,8 +9,8 @@ const transporter = nodemailer.createTransport({
     port: 465,
     secure: true,
     auth: {
-        user: " mahmoudelmasry853j@gmail.com",
-        pass: 'qzzx kxsg gjwn vonq'
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
     }
 })
 
@@ -37,6 +37,7 @@ exports.getSignUp = (req, res, next) => {
         pageTitle: "SignUp",
         errorMessage: message,
         oldContent: {
+            name: "",
             email: "",
             password: "",
             confirmPassword: ""
@@ -47,6 +48,7 @@ exports.getSignUp = (req, res, next) => {
 }
 
 exports.postSignUp = (req, res, next) => {
+    const name = req.body.name;
     const email = req.body.email;
     const password = req.body.password;
     const confirmPassword = req.body.confirmPassword;
@@ -59,6 +61,7 @@ exports.postSignUp = (req, res, next) => {
             pageTitle: "SignUp",
             errorMessage: errors.array()[0].msg,
             oldContent: {
+                name: name,
                 email: email,
                 password: password,
                 confirmPassword: confirmPassword
@@ -70,6 +73,7 @@ exports.postSignUp = (req, res, next) => {
     bcrypt.hash(password, 10)
         .then(hashedPassword => {
             const user = new User({
+                name: name,
                 email: email,
                 password: hashedPassword,
                 cart: { items: [] }
@@ -80,7 +84,7 @@ exports.postSignUp = (req, res, next) => {
             res.redirect('/login');
             return transporter.sendMail({
                 to: email,
-                from: 'test@shop.com',
+                from: process.env.EMAIL_FROM,
                 subject: 'SignUp Success',
                 html: '<h1>Signed Up Successfully</h1>'
             })
@@ -192,7 +196,7 @@ exports.postReset = (req, res, next) => {
                         res.redirect('/');
                         return transporter.sendMail({
                             to: req.body.email,
-                            from: 'test@shop.com',
+                            from: process.env.EMAIL_FROM,
                             subject: 'Reset Password',
                             html: `
                             <p>You requested a password reset</p>
