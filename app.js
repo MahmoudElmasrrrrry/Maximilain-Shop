@@ -82,7 +82,11 @@ app.use((req, res, next) => {
       req.user = user;
       next();
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 })
 app.use(flash());
 app.use(doubleCsrfProtection);
@@ -95,6 +99,8 @@ app.use("/admin", adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes)
 app.use(errorController.get404);
+
+app.use(errorController.get500);
 
 mongoose.connect(MongoUri)
   .then(() => {

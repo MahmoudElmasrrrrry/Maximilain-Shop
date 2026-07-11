@@ -31,7 +31,9 @@ exports.getProducts = (req, res, next) => {
       });
     })
     .catch((err) => {
-      console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
@@ -46,7 +48,9 @@ exports.getProduct = (req, res, next) => {
       });
     })
     .catch((err) => {
-      console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
@@ -74,7 +78,9 @@ exports.getIndex = (req, res, next) => {
       });
     })
     .catch((err) => {
-      console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
@@ -89,7 +95,9 @@ exports.getCart = (req, res, next) => {
       });
     })
     .catch((err) => {
-      console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
   // Cart.getCart(cart => {
   //   Product.findAll().then(products => {
@@ -118,7 +126,9 @@ exports.postCart = (req, res, next) => {
   }).then(result => {
     return res.redirect('/cart');
   }).catch(err => {
-    console.log(err);
+    const error = new Error(err);
+    error.httpStatusCode = 500;
+    return next(error);
   });
   // let fetchedCart;
   // req.user
@@ -160,7 +170,9 @@ exports.postCartDeleteProduct = (req, res, next) => {
     .then(result => {
       return res.redirect('/cart');
     }).catch(err => {
-      console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
   // req.user
   //   .getCart()
@@ -199,7 +211,9 @@ exports.postOrder = (req, res, next) => {
     .then(result => {
       return res.redirect('/orders');
     }).catch(err => {
-      console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
@@ -212,7 +226,11 @@ exports.getOrders = (req, res, next) => {
         orders: orders
       })
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
 
 exports.getCheckout = (req, res, next) => {
@@ -252,7 +270,9 @@ exports.getCheckout = (req, res, next) => {
       });
     })
   }).catch(err => {
-    console.log(err);
+    const error = new Error(err);
+    error.httpStatusCode = 500;
+    return next(error);
   });
 };
 
@@ -277,7 +297,9 @@ exports.checkoutSuccess = (req, res, next) => {
     .then(result => {
       return res.redirect('/orders');
     }).catch(err => {
-      console.log(err);
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
     });
 };
 
@@ -478,5 +500,9 @@ exports.getInvoice = (req, res, next) => {
 
       pdfDoc.end();
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    });
 };
